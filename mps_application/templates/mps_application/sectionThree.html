@@ -1,0 +1,205 @@
+{% extends "mps_application/layout.html" %}
+{% block title %}
+Section Three
+{% endblock %}
+{% load static %}
+<script src="{static 'mps_application/js/sectionThreeValidation.js'}"></script>
+{% block content %}
+<div class="header">
+    <h1>Mobility Parking Scheme (MPS) Application</h1>
+    {% if errors %}
+    <div class="error-messages" style="color: red;">
+        <ul>
+            {% for error in errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
+<form id="sectionThree" class="section" method="post" action="{% url 'sectionThree' application_id=application.application_id %}">
+    {% csrf_token %}
+    <h3>SECTION 3: Medical Report</h3>
+    <ol class="sectionThree">
+    <li>
+        <h4>History</h4>
+        <div class="form-row">
+        <label for="years">How long have you treated this patient? </label>
+        </div>
+        <div class="form-row">
+            <label for="Years">Years</label> 
+            <input type="text" id="years" name="years" value="{{  application.patient_years }}">
+        </div>
+        <div class="form-row">
+            <label for="months">Months</label>
+            <input type="text" id="months" name="months" value="{{ application.patient_months }}">
+        </div>
+    </li>
+
+    <li>
+    <h4>Vision</h4>
+        <div class="form-check">
+            <input type="radio" id="glasses" name="vision">
+            <label for="glasses">Are glasses/lenses worn (distance)?</label>
+        </div>
+        <div class="form-check">
+            <input type="radio" id="fields-normal" name="vision">
+            <label for="fields-normal">Fields of vision: Normal</label>
+        </div>
+        <div class="form-check">
+            <input type="radio" id="fields-abnormal" name="vision">
+            <label for="fields-abnormal">Fields of vision: Abnormal</label>
+        </div>
+        <div class="form-check">
+            <input type="radio" id="double-vision" name="vision">
+            <label for="double-vision">Double vision</label>
+        </div>
+</li>
+
+<li>
+    <h4>Cardio-Vascular Condition</h4>
+    <div class="form-check-group">
+        <div class="form-check">
+            <input type="radio" id="no-cardiovascular" name="Cardio-Vascular">
+            <label for="no-cardiovascular">No</label>
+        </div>
+        <div class="form-check">
+            <input type="radio" id="acute" name="Cardio-Vascular">
+            <label for="acute">Acute myocardial infarct</label>
+        </div>
+        <div class="form-check">
+            <input type="radio" id="angina" name="Cardio-Vascular">
+            <label for="angina">Angina</label>
+        </div>
+        <div class="form-check">
+            <input type="radio" id="pacemaker" name="Cardio-Vascular">
+            <label for="pacemaker">Pacemaker</label>
+        </div>
+    </div>
+</li>
+
+<li>
+    <h4>Diabetes</h4>
+    <div class="form-check-group">
+        <div class="form-check">
+            <input type="radio" id="no-diabetes" name="Diabetes">
+            <label for="no-diabetes">No</label>
+        </div>
+        <div class="form-check">
+            <input type="radio" id="controlled" name="Diabetes">
+            <label for="controlled">Controlled by diet</label>
+        </div>
+        <div class="form-check">
+            <input type="radio" id="medication" name="Diabetes">
+            <label for="medication">Controlled with medication</label>
+        </div>
+        <div class="form-check">
+            <input type="radio" id="hypoglycaemia" name="Diabetes">
+            <label for="hypoglycaemia">Hypoglycaemic awareness</label>
+        </div>
+    </div>
+</li>
+
+<li>
+    <h4>Musculo-Skeletal Condition</h4>
+        <div class="form-check">
+            <input type="radio" id="no-msk" name="Musculo-Skeletal">
+            <label for="no-msk">No</label>
+        </div>
+        <div class="form-check">
+            <input type="radio" id="pain" name="Musculo-Skeletal">
+            <label for="pain">Muscular or joint pain</label>
+        </div>
+</li>
+
+<li>
+    <h4>Epilepsy</h4>
+        <div class="form-check">
+            <input type="radio" id="no-epilepsy" name="Epilepsy">
+            <label for="no-epilepsy">No</label>
+        </div>
+        <div class="form-check">
+            <input type="radio" id="yes-epilepsy" name="Epilepsy">
+            <label for="yes-epilepsy">Yes</label>
+        </div>
+    <div class="form-row">
+        <label for="epilepsy-onset">Date of onset:</label>
+        <input type="date" id="epilepsy-onset" name="epilepsy-onset" value="{{ application.epilepsy_date_onset }}">
+    </div>
+    <div class="form-row">
+        <label for="epilepsy-last-seizure">Date of last seizure:</label>
+        <input type="date" id="epilepsy-last-seizure" name="epilepsy-last-seizure" value="{{ epilepsy_last_seizure }}">
+    </div>
+</li>
+
+<li>
+    <label for="Doctor'sCertification">Doctor's Certification:</label>
+    <P>The person whose name appears on this application was examined by me today in accordane with the published guidelines for the class of license held or applied for and is considered:</P>
+    <div>
+    <input type="radio" id="Fit" name="Certification">
+    <label for="Fit">Fit to drive</label>
+    </div>
+    <div>
+    <input type="radio" id="unfit" name="Certification">
+    <label for="unfit">Unfit to drive</label>
+</div> 
+</li>
+
+    <li>
+        <label for="if-unfit-only"><bold>IF UNFIT ONLY:</bold></label>
+        <p>Please indicate if the license holder is fit to hold an alternative class of licence as shown below. Accordingly, the licence class will then be downgraded.</p>
+        <p>Vehicle - Current Class :</p>
+        <label for="Car">
+            <input type="radio" id="car" name="unfit" >
+            Car - C
+        </label>
+
+        <label for="Motorcycle">
+            <input type="radio" id="Motorcycle" name="unfit" >
+            Motorcycle - R 
+        </label>
+
+        <label for="Light Rigid">
+            <input type="radio" id="Lght Rigid" name="unfit">
+            Light Rigid(e.g., light truck, small bus) - LR      
+        </label>
+
+        <label for="Medium Rigid">
+            <input type="radio" id="Medium Rigid" name="unfit" >
+            Medium Rigid(e.g., truck, bus) - MR        
+        </label>
+
+        <label for="Heavy Rigid">
+            <input type="radio" id="Heavy Rigid" name="unfit" >
+            Heavy Rigid(e.g., heavy truck, heavy bus) - HR        
+        </label>
+    <label for="Please indicate unfit">Please indicate unfit :-</label>
+        <label for="no-further-review-required">
+            <input type="radio" id="no-further-review-required" name="review" value="noFurther">
+            No further review required
+        </label>
+
+        <label for=" normal review period">
+            <input type="radio" id="normal review period" name="review" value="normalReview">
+            Normal Review Period
+        </label>
+
+        <label for="Other">
+            <input type="radio" id="Other" name="review" value="other">
+            Other
+        </label>
+    </li>
+        <li class="mpDetails">
+        <h3>Practitioner Information</h3>
+                <p>Name: {{ request.user.first_name }} {{ request.user.last_name }}</p>
+                <p>Business Address: {{ request.user.medical_practitioner.address }}{{ request.user.medical_practitoner.postal_code }}</p>
+                <p>Provider Number: {{ request.user.medical_practitoner.user.id }}</p>
+                <p>Office Telephone Number: {{ request.user.medical_practitoner.phone_number }}</p>
+        </li>
+</ol>
+<div class="buttons">
+    <input type="submit" value="Submit" name="action">
+    <input type="submit" value="Save" name="action">
+</div>
+</form>
+{% endblock %}

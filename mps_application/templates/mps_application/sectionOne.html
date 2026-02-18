@@ -1,0 +1,120 @@
+{% extends "mps_application/layout.html" %}
+{% block title %}
+Section One
+{% endblock %}
+{% load static %}
+<script src="{static 'mps_application/js/secOneValidation.js'}"></script>
+{% block content %}
+<div class="section">
+    <h1 id="residentApplication">Mobility Parking Scheme (MPS) Application</h1>
+    {% if errors %}
+    <div class="error-messages" style="color: red;">
+        <ul>
+            {% for error in errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    <form id="residentApplicationForm" method="post" action="{% url 'sectionOne' %}"  onsubmit="return validateForm(this);">
+        {% csrf_token %}
+        <div class="application">
+            <h4>Type of MPS permit needed</h4>
+            <div class="radios">
+                <div class="ind">
+                    <label for="individual">Individual</label>
+                    <input type="radio" name="permitType" id="individual" value="INDI"><br>
+                </div>
+                <div class="temp">
+                    <label for="temporary">Temporary</label>
+                    <input type="radio" name="permitType" id="temporary" value="TEMP"><br>
+                </div>
+            </div>
+            <h4>Type of Application</h4>
+            <div class="radios">
+                <label for="new">New</label>
+                <input type="radio" name="applicationType" id="new" value="NEW"> <br>
+                <label for="renewal">Renewal</label>
+                <input type="radio" name="applicationType" id="renewal" value="RENEW"> <br>
+                <label for="replacement"> Replacement (specify details below)</label>
+                <input type="radio" name="applicationType" id="replacement" value="REPLA"><br>
+            </div>
+            <label for="reasons">Reason for replacement:</label>
+            <select id="reasons" name="reasons" size="1" >
+                <optgroup label="">
+                    <option value="" disabled selected>Select Reason</option>
+                        <option value="LOST">Lost</option>
+                        <option value="STOL">Stolen</option> 
+                        <option value="DMAG">Damaged Permit</option>
+                        <option value="DFAC">Defaced Permit</option>
+                        <option value="CONF">Confiscated Permit</option>
+                        <option value="CHDE">Changed Details including Appearance</option>
+                        <option value="NORE">Non Receipt of Permit</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <h3 id="listHeader">SECTION 1</h3>
+        <ol>
+            <li class="personalDetails">
+                <h4>Applicant Information</h4>
+                    <p>Applicant Name: {{ request.user.first_name }} {{ request.user.last_name }}</p>
+                    <p>Residential Address: {{ request.user.resident.address }}</p>
+                    <p>Date of Birth: {{ request.user.resident.date_of_birth }}</p>
+                    <p>Customer no.: {{ request.user.id }}</p>
+            </li>
+
+            <li class="licenseDetails">
+                <h4>Do you hold or have you ever held a license to drive or ride or a NSW Phot Card/Proof of Age Card in NSW in the above name or in another name?</h4>
+                <label for="noHeldLicense">No </label>
+                <input type="radio" id="noHeldLicense" name="heldLicense" value="No"> 
+                <label for="yesHeldLicense">Yes</label>
+                <input type="radio" id="yesHeldLicense" name="heldLicense" value="Yes">
+                <label for="othername">Othername:</label>
+                <input type="text" id="othername" name="othername">
+            </li>
+            <li class="licenseInfo">
+                <h4>Do any of the following statements apply to you?</h4>
+                <h5>(a) You hold a current or suspended NSW license</h5>
+                <label for="noCurrent">No</label>
+                <input type="radio" id="noCurrent" name="currentLicense" value="No"> now go to 4 <br>
+                <label for="yesCurrent">Yes</label>
+                <input type="radio" id="yesCurrent" name="currentLicense" value="Yes"><br>
+                <label for="licenseNumber">License Number</label><br>
+                <input type="text" id="licenseNumber" name="licenseNumber"><br>
+                <label for="licenseClass">License Class</label><br>
+                <input type="text" id="licenseClass" name="licenseClass"><br>
+                <label for="expiry">Expiry date</label><br>
+                <input type="date" id="expiry" name="expiry">
+                
+                <h5>(b) Your license is subject to medical review by RM (including older driver reviews).</h5>
+                <label for="noMedRev">No</label>
+                <input type="radio" id="noMedRev" name="medicalReview" value="No">Your doctor needs to complete Section 3 <br>
+                <label for="yesMedRev">Yes</label>
+                <input type="radio" id="yesMedRev" name="medicalReview" value="Yes">Complete (c) below <br>
+                <h5>(c)You have an additional medical condition to report to RMS.</h5>
+                <label for="noMedCon">No</label>
+                <input type="radio" id="noMedCon" name="medicalCondition" value="No"><br>
+                <label for="yesMedCon">Yes</label>
+                <input type="radio" id="yesMedCon" name="medicalCondition" value="Yes"> Your doctor needs to complete Section 3 <br>
+            </li>
+            
+            <li class="declaration">
+                <h4>Declaration by Applicant</h4>
+                <p>***Please read important Privacy Statement and warning on page 1 of this form.</p>
+                <div class="mpSubmission">
+                    <input type="checkbox" id="agreeSubmission" name="agreeSubmission">
+                    <label for="agreeSubmission" id="submissionAgreed">I declare that the details in this application are true and complete and that any MPS permit issued as a result of this application, will only be used as set out in the Conditions of Use. I am aware that  information provided in this application is used for the MPS and Driver Licensing Scheme.</label>                     
+                </div>
+
+                <p>Date: {{ current_date }}</p>
+                
+            </li>
+        </ol>
+
+        <div class="buttons" id="sectionOneButton">
+            <input type="submit">
+        </div>    
+    </form>
+</div>
+{% endblock %}

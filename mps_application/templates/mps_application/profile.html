@@ -1,0 +1,31 @@
+{% extends "mps_application/layout.html" %}
+{% block title %}
+Profile
+{% endblock %}
+{% block content %}
+<div class="profile_container">
+    <div class="profile">
+        <p id="myAccount">My Account</p>
+        <p>Name: {{ request.user.first_name }} {{ request.user.last_name }}</p>
+        <p>Username: {{ request.user.username }}</p>
+        <p>Date Joined: {{ request.user.date_joined }}</p>
+        <p>Last Login: {{ request.user.last_login }}</p>
+    </div>
+    {% if request.user.is_authenticated and not request.user.is_staff %}
+    <div class="statusList">
+        <p id="appStatus">Application Status</p>
+        <ol>
+            {% for application in request.user.resident.application_set.all %}
+            <li>
+                <p>Application ID: {{ application.application_id }}</p>
+                <p>Status: {{ application.status }}</p>
+                <p>Last Accessed: {{ application.application_date }}</p>
+            </li>
+            {% empty %}
+            <li>No applications found.</li>
+            {% endfor %}
+        </ol>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

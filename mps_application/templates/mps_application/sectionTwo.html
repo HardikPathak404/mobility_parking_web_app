@@ -1,0 +1,117 @@
+{%extends "mps_application/layout.html" %}
+{% block title %}
+Section Two
+{% endblock %}
+{% load static %}
+<script src="{static 'mps_application/js/secTwoValidation.js'}"></script>
+{% block content %}
+<div class="section">
+    <h1 id="residentApplication">Medical Certificate</h1>
+    {% if errors %}
+    <div class="error-messages" style="color: red;">
+        <ul>
+            {% for error in errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+        <form id="sectionTwo" method="post" action="{% url 'sectionTwo' application_id=application.application_id %}" novalidate onsubmit="return validateTheForm(this);">
+            {% csrf_token %}
+                <div class="secTwoTop">
+                    <h3>SECTION 2</h3>
+                    <p>To be completed by a regiistered medical practitioner.</p>
+                    <p>
+                        The MPS is designed to maintain the independence of people with a mobility disability.
+                        Applicants that do not meet the elgibility criteria on page 1 must not be certified as 
+                        eligible for a permit. It is important that only people with medical conditions that severely
+                        affect thier mobility are certified as meeting the scheme's eligibility criteria.
+                    </p>
+                </div>
+                <div class="applicantInfo">
+                    <h3>Applicant Information</h3>
+                    <p>Name: </p>
+                    <p  id="applicantName">{{ resident.user.first_name }} {{ resident.user.last_name }}</p>
+                    <p>Date of Birth: </p>
+                    <p id="applicantDOB">{{ resident.date_of_birth }}</p>
+                </div>
+                <ol>
+                    <li class="medicalCondition">
+                        <h3>
+                            I certify that I have examined the applicant shown above in thiw form and 
+                            the applicant's condition is:
+                        </h3>
+                        <label for="disability" id="disability_label">Select one of the clinically recognisable disabilities: </label>
+                        <select id="disability" name="disability" onblur="validateField(this);">
+                            <optgroup label="">
+                                <option value="" selected disabled>Select disabilities</option>
+                                    <option value="paraplegia">Paraplegia</option>
+                                    <option value="quadriplegia">Quadriplegia</option>
+                                    <option value="legAmputation">Leg amputation</option>
+                                    <option value="motorNeuron">Motor Neuron disease</option>
+                                    <option value="cerebralPalsy">Cerebral palsy</option>
+                                    <option value="chromosalOrSyndromic">Chromosomal or syndromic conditions</option>
+                                    <option value="neuroDegnerative">Neuro degenerative disorder</option>
+                                    <option value="neuroMascular">Neuro muscular disorder</option>
+                                    <option value="blindness">Blindness</option>
+                                    <option value="other">Other</option>
+                            </optgroup>
+                        </select>
+                        <div>
+                            <label for="otherDisability" id="otherDisability_label">Other, please specify: </label>
+                            <input type="text" id="otherDisability" name="disability" value="{{ application.otherDisability }}" onblur="validateOtherField();">
+                        </div>
+                        <h3>Is the condition temporary?</h3>
+                        <div class="tempCondition">
+                            <div>
+                            <label for="isTemporary" id="isTemporary_label">Yes</label>
+                            <input type="radio" id="isTemporary" name="conditionTemp" value="isTemporary" onblur="validateCondition();">
+                            </div>
+                            <div>
+                            <label for="notTemporary" id="notTemporary_label">No</label>
+                            <input type="radio" id="notTemporary" name="conditionTemp" value="notTemporary" onblur="validateCondition();">
+                            </div>
+                            <div class="conditionPeriod">
+                            <label for="period">If yes, give period of disability: </label>
+                            <input type="text" id="period" name="period" value="{{ application.period }}" onblur="validatePeriodField(this);" onchange="validateNumber(this, errorMonth, months);">
+                            <p id="months"> months</p>
+                            <p id="errorMonth"></p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="declaration">
+                        <h3>Declaration by the registered medical practitioner</h3>
+                        <p>***Please read important Privacy Statement and warning on page 1 of this form.</p>
+                        <div class="mpDeclaration">
+                            <input type="checkbox" id="agreeDeclaration" name="agreeDeclaration" onchange="errorCheckBox(this)">
+                            <label for="agreeDeclaration" id="agreeDeclaration_label">I declare that the details in this application are true and complete. I understand 
+                                that my "personal information" is being collected for confirmation of the MPS 
+                                Application Medical Certificate.</label>
+                        </div>
+                        <div class="mpSubmission">
+                            <input type="checkbox" id="agreeSubmission" name="agreeSubmission" onchange="errorCheckBox(this)">
+                            <label for="agreeSubmission" id="agreeSubmission_label">I certify that today I have examined the person shown as the applicant for a MPS permit 
+                                and this person meets the eligibility criteria for a MPS permit as shown on the front 
+                                page of this form.</label>
+                        </div>
+                        <p>Date: {{ current_date }}
+                    </li>
+                </ol>
+                <div class="mpInfo">
+                    <h3>Practitioner Information</h3>
+                    <p>Name: </p>
+                    <p id="practitionerName">{{ request.user.first_name }} {{ request.user.last_name }}</p>
+                    <p>Business Address: </p>
+                    <p id="businessAddress">{{ request.user.medical_practitioner.address }}{{ request.user.medical_practitioner.postal_code }}</p>
+                    <p>Provider Number: </p>
+                    <p id="providerNumber">{{ request.user.id }}</p>
+                    <p>Office Telephone Number: </p>
+                    <p id="officePhoneNumber">{{ request.user.medical_practitioner.phone_number }}</p>
+                </div>
+            <div class="buttons">
+                <input type="submit" value="Submit" name="action">
+                <input type="submit" value="Save" name="action">
+            </div>
+        </form>
+</div>
+{% endblock %}

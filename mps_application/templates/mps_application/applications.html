@@ -1,0 +1,40 @@
+{% extends "mps_application/layout.html" %}
+{% block title %}
+Applications
+{% endblock %}
+{% block content %}
+<div class="applicationList_container">
+    <form method="POST" action="{% url 'applications' %}">
+        {% csrf_token %}
+        Filter by:
+        <select name="status" class="statusSearch">
+            <option value="">Select Status</option>
+            <option value="RR">Ready Review</option>
+            <option value="DR">Draft</option>
+            <option value="RE">Reviewed</option>
+        </select>
+        <input type="submit" value="Search" >
+    </form> 
+</div>
+<div>
+    <p id="noOfApplication">
+        {{ count }} applications found<br><br>
+    </p>
+        {% for item in application %}
+        <div>
+            <form id="applicant" class="applicantList" method="get" action="{% url 'sectionTwo' item.application_id %}">
+                <ol>
+                    <li>
+                        <p>Applicant: {{ item.resident.user.first_name }} {{ item.resident.user.last_name }}</p>
+                        <p>Status: {{ item.status }}</p>
+                        <p>Medical Practitioner:</span> <span>{{ item.medical_practitioner.user.first_name }} {{ item.medical_practitioner.user.last_name }}</p>
+                        {% if item.status != 'RE' %}
+                            <p><input type="submit" value="Review"></p>
+                        {% endif %}
+                    </li>
+                </ol>
+            </form>
+        </div>
+        {%  endfor %}
+</div>
+{% endblock %}

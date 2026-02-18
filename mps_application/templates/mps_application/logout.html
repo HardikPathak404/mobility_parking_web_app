@@ -1,0 +1,17 @@
+{% extends "mps_application/layout.html" %}
+{% block title %}
+Logout
+{% endblock %}
+{% block content %}
+<form method="post"  class="logout" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <h2>Are you sure you want to log out?</h2>
+    <div class="logout_container">
+        <input type="submit" value="Logout">
+        <a href="{% url 'home' %}"><input type="button" value="Cancel"></a>
+        {% if error_message %}
+        <div calss="logError">{{ error_message }}</div>
+        {% endif %}
+    </div>
+</form>
+{% endblock %}

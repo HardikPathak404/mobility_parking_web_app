@@ -29,6 +29,19 @@ python manage.py runserver
 
 Then open: **http://127.0.0.1:8000**
 
-## Author
+Author
 Hardik Pathak  
 Information Technology (Cyber Security)
+
+
+Preview
+Homepage
+![Homepage](homepagee.png)
+
+ Registration Page
+![Registration](signup1.png)
+
+![Application](signup2.png)
+
+
+
